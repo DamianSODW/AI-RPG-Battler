@@ -5,9 +5,9 @@ namespace BehaviorTree
 {
     public enum NodeState
     {
-        RUNNING,
-        SUCCESS,
-        FAILURE
+        Running,
+        Success,
+        Failure
     }
 
     public class Node
@@ -17,8 +17,9 @@ namespace BehaviorTree
         public Node parent;
         protected List<Node> children = new List<Node>();
 
-        private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
+        private Dictionary<string, object> dataContext = new Dictionary<string, object>();
 
+        #region Constructors
         public Node()
         {
             parent = null;
@@ -26,26 +27,33 @@ namespace BehaviorTree
         public Node(List<Node> children)
         {
             foreach (Node child in children)
-                _Attach(child);
+            {
+                Attach(child);
+            }
         }
-
-        private void _Attach(Node node)
+        #endregion
+        
+        private void Attach(Node child)
         {
-            node.parent = this;
-            children.Add(node);
+            child.parent = this;
+            children.Add(child);
         }
 
-        public virtual NodeState Evaluate() => NodeState.FAILURE;
+        public virtual NodeState Evaluate()
+        {
+            return NodeState.Failure;
+        }
+        
 
         public void SetData(string key, object value)
         {
-            _dataContext[key] = value;
+            dataContext[key] = value;
         }
 
         public object GetData(string key)
         {
             object value = null;
-            if (_dataContext.TryGetValue(key, out value))
+            if (dataContext.TryGetValue(key, out value))
                 return value;
 
             Node node = parent;
@@ -61,9 +69,9 @@ namespace BehaviorTree
 
         public bool ClearData(string key)
         {
-            if (_dataContext.ContainsKey(key))
+            if (dataContext.ContainsKey(key))
             {
-                _dataContext.Remove(key);
+                dataContext.Remove(key);
                 return true;
             }
 

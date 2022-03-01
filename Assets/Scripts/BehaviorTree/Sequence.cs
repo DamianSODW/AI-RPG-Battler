@@ -4,9 +4,10 @@ namespace BehaviorTree
 {
     public class Sequence : Node
     {
+        #region Constructors
         public Sequence() : base() { }
         public Sequence(List<Node> children) : base(children) { }
-
+        #endregion
         public override NodeState Evaluate()
         {
             bool anyChildIsRunning = false;
@@ -15,21 +16,21 @@ namespace BehaviorTree
             {
                 switch (node.Evaluate())
                 {
-                    case NodeState.FAILURE:
-                        state = NodeState.FAILURE;
+                    case NodeState.Failure:
+                        state = NodeState.Failure;
                         return state;
-                    case NodeState.SUCCESS:
+                    case NodeState.Success:
                         continue;
-                    case NodeState.RUNNING:
+                    case NodeState.Running:
                         anyChildIsRunning = true;
                         continue;
                     default:
-                        state = NodeState.SUCCESS;
+                        state = NodeState.Success;
                         return state;
                 }
             }
 
-            state = anyChildIsRunning ? NodeState.RUNNING : NodeState.SUCCESS;
+            state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
             return state;
         }
 

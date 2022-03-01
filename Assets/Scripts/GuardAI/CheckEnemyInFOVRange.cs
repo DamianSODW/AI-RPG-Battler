@@ -29,15 +29,15 @@ public class CheckEnemyInFOVRange : Node
             {
                 parent.parent.SetData("target", colliders[0].transform);
                 _animator.SetBool("Walking", true);
-                state = NodeState.SUCCESS;
+                state = NodeState.Success;
                 return state;
             }
 
-            state = NodeState.FAILURE;
+            state = NodeState.Failure;
             return state;
         }
 
-        state = NodeState.SUCCESS;
+        state = NodeState.Success;
         return state;
     }
 

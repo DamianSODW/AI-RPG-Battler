@@ -4,29 +4,30 @@ namespace BehaviorTree
 {
     public class Selector : Node
     {
+        #region Constructors
         public Selector() : base() { }
         public Selector(List<Node> children) : base(children) { }
-
+        #endregion
         public override NodeState Evaluate()
         {
-            foreach (Node node in children)
+            foreach (Node child in children)
             {
-                switch (node.Evaluate())
+                switch (child.Evaluate())
                 {
-                    case NodeState.FAILURE:
+                    case NodeState.Failure:
                         continue;
-                    case NodeState.SUCCESS:
-                        state = NodeState.SUCCESS;
+                    case NodeState.Success:
+                        state = NodeState.Success;
                         return state;
-                    case NodeState.RUNNING:
-                        state = NodeState.RUNNING;
+                    case NodeState.Running:
+                        state = NodeState.Running;
                         return state;
                     default:
                         continue;
                 }
             }
 
-            state = NodeState.FAILURE;
+            state = NodeState.Failure;
             return state;
         }
 

@@ -44,7 +44,7 @@ public class TaskAttack : Node
             }
         }
 
-        state = NodeState.RUNNING;
+        state = NodeState.Running;
         return state;
     }
 
