@@ -6,50 +6,50 @@ using BehaviorTree;
 
 public class TaskPatrol : Node
 {
-    private Transform _transform;
-    private Animator _animator;
-    private Transform[] _waypoints;
+    private Transform transform;
+    private Animator animator;
+    private Transform[] waypoints;
 
-    private int _currentWaypointIndex = 0;
+    private int currentWaypointIndex = 0;
 
-    private float _waitTime = 1f; // in seconds
-    private float _waitCounter = 0f;
-    private bool _waiting = false;
+    private float waitTime = 1f; // in seconds
+    private float waitCounter = 0f;
+    private bool waiting = false;
 
     public TaskPatrol(Transform transform, Transform[] waypoints)
     {
-        _transform = transform;
-        _animator = transform.GetComponent<Animator>();
-        _waypoints = waypoints;
+        this.transform = transform;
+        this.waypoints = waypoints;
+        animator = transform.GetComponent<Animator>();
     }
 
     public override NodeState Evaluate()
     {
-        if (_waiting)
+        if (waiting)
         {
-            _waitCounter += Time.deltaTime;
-            if (_waitCounter >= _waitTime)
+            waitCounter += Time.deltaTime;
+            if (waitCounter >= waitTime)
             {
-                _waiting = false;
-                _animator.SetBool("Walking", true);
+                waiting = false;
+                animator.SetBool("Walking", true);
             }
         }
         else
         {
-            Transform wp = _waypoints[_currentWaypointIndex];
-            if (Vector3.Distance(_transform.position, wp.position) < 0.01f)
+            Transform currentWaypoint = waypoints[currentWaypointIndex];
+            if (Vector3.Distance(transform.position, currentWaypoint.position) < 0.01f)
             {
-                _transform.position = wp.position;
-                _waitCounter = 0f;
-                _waiting = true;
+                transform.position = currentWaypoint.position;
+                waitCounter = 0f;
+                waiting = true;
 
-                _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
-                _animator.SetBool("Walking", false);
+                currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+                animator.SetBool("Walking", false);
             }
             else
             {
-                _transform.position = Vector3.MoveTowards(_transform.position, wp.position, GuardBT.speed * Time.deltaTime);
-                _transform.LookAt(wp.position);
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.position, GuardBT.speed * Time.deltaTime);
+                transform.LookAt(currentWaypoint.position);
             }
         }
 

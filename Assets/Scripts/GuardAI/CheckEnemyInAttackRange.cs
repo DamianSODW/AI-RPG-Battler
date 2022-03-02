@@ -6,36 +6,33 @@ using BehaviorTree;
 
 public class CheckEnemyInAttackRange : Node
 {
-    private Transform _transform;
-    private Animator _animator;
+    private Transform transform;
+    private Animator animator;
+
 
     public CheckEnemyInAttackRange(Transform transform)
     {
-        _transform = transform;
-        _animator = transform.GetComponent<Animator>();
+        this.transform = transform;
+        animator = transform.GetComponent<Animator>();
     }
 
     public override NodeState Evaluate()
     {
-        object t = GetData("target");
-        if (t == null)
+        object target = GetData("target");
+        if (target == null)
         {
-            state = NodeState.Failure;
-            return state;
+            return NodeState.Failure;
         }
 
-        Transform target = (Transform)t;
-        if (Vector3.Distance(_transform.position, target.position) <= GuardBT.attackRange)
+        Transform targetTransform = (Transform)target;
+        if (Vector3.Distance(transform.position, targetTransform.position) <= GuardBT.attackRange)
         {
-            _animator.SetBool("Attacking", true);
-            _animator.SetBool("Walking", false);
+            animator.SetBool("Attacking", true);
+            animator.SetBool("Walking", false);
 
-            state = NodeState.Success;
-            return state;
+            return NodeState.Success;
         }
 
-        state = NodeState.Failure;
-        return state;
+        return NodeState.Failure;
     }
-
 }
